@@ -1,0 +1,111 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author ESHA
+ */
+import java.util.*;
+
+class Graph1
+{
+    private LinkedList<Integer>[] adj;
+    private int v;
+    private int e;
+    Graph1(int v,int e)
+    {
+       adj = new LinkedList[v];
+       this.v = v;
+       this.e = e;
+       int i;
+       for(i = 0;i < v;i++)
+       {
+           adj[i] = new LinkedList<Integer>();
+       }
+    }
+    void addEdge(int v,int w)
+    {
+        this.adj[w].add(v);
+        this.adj[v].add(w);
+    }
+    int v()
+    {
+        return this.v;
+    }
+    int e()
+    {
+        return this.e;
+    }
+    Iterable<Integer> adj(int v)
+    {
+        return this.adj[v];
+    }
+}
+
+class DFS1
+{
+    boolean[] marked;
+    DFS1(Graph1 G)
+    {
+        marked = new boolean[G.v()];
+    }
+    boolean checkcycle(Graph1 G)
+    {
+        int i;
+        for(i = 0;i < G.v();i++)
+        {
+            if(!marked[i])
+            {
+                if(dfs1(G,i,-1))
+                    return true;
+            }
+        }
+        return false;
+    }
+    boolean dfs1(Graph1 G, int v,int parent)
+    {
+        marked[v] = true;
+        for(Integer w : G.adj(v))
+        {
+            if(!marked[w])
+            {
+                if(dfs1(G,w,v))
+                    return true;
+            }
+            else
+            {
+                if(marked[w] && w != parent)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+public class GraphCycle {
+    public static void main(String args[])
+    {
+        Scanner obj = new Scanner(System.in);
+        int vertices,edges,i;
+        System.out.println("Enter number of vertices");
+        vertices = obj.nextInt();
+        System.out.println("Enter number of edges");
+        edges = obj.nextInt();
+        Graph1 G = new Graph1(vertices,edges);
+        for(i = 0;i < edges;i++)
+        {
+            G.addEdge(obj.nextInt(),obj.nextInt());
+        }
+        DFS1 dfs = new DFS1(G);
+        boolean flag = dfs.checkcycle(G);
+        if(flag == true)
+            System.out.println("true");
+        else
+            System.out.println("false");
+    }
+    
+}
