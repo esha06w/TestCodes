@@ -1,0 +1,122 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author ESHA
+ */
+
+class Nodes
+{
+    int data;
+    Nodes left;
+    Nodes right;
+    boolean color;
+    Nodes(int data,boolean color)
+    {
+        this.data = data;
+        this.left = null; 
+        this.right = null;
+        this.color = color;
+    }
+}
+
+class Tree
+{
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
+    Nodes root;
+    Tree()
+    {
+        root = null;
+    }
+    
+    private boolean isRed(Nodes node)
+    {
+        if(node == null)
+            return false;
+        return node.color==RED;
+    }
+    
+    public void insert(int data)
+    {
+        root = insert(root,data);
+    }
+    
+    private Nodes insert(Nodes node,int data)
+    {
+        if(node == null)
+            return new Nodes(data,RED);
+        else if(data < node.data)
+            node.left = insert(node.left,data);
+        else if(data > node.data)
+            node.right = insert(node.right,data);
+        else
+            node.data = data;
+        
+        if(!isRed(node.left) && isRed(node.right))
+            node = rotateLeft(node);
+        if(isRed(node.left) && isRed(node.left.left))
+            node = rotateRight(node);
+        if(isRed(node.left) && isRed(node.right))
+            flipColor(node);
+        
+        return node;
+    }
+    
+    private Nodes rotateLeft(Nodes node)
+    {
+        Nodes h = node.right;
+        node.right = h.left;
+        h.left = node;
+        h.color = node.color;
+        node.color = RED;
+        return h;
+    }
+    
+    private Nodes rotateRight(Nodes node)
+    {
+        Nodes h = node.left;
+        node.left = h.right;
+        h.right = node;
+        h.color = node.color;
+        node.color = RED;
+        return h;
+    }
+    
+    private void flipColor(Nodes node)
+    {
+        node.left.color = BLACK;
+        node.right.color = BLACK;
+        node.color = RED;
+    }
+    
+    public int height()
+    {
+        return height(root);
+    }
+    
+    private int height(Nodes node)
+    {
+        if(node == null)
+            return 0;
+        return ( 1 + Math.max(height(node.left),height(node.right)));
+    }
+}
+
+public class RedAndBlack {
+    public static void main(String[] args)
+    {
+        Tree redandblack = new Tree();
+        redandblack.insert(5);
+        redandblack.insert(4);
+        redandblack.insert(3);
+        redandblack.insert(2);
+        redandblack.insert(1);
+        System.out.println(redandblack.height());
+    }
+    
+}
