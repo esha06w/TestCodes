@@ -1,2 +1,6 @@
 this is try file 1
+<<<<<<< HEAD
 yes it is change
+=======
+bye
+>>>>>>> c496d4b477eb195d4874171c36684d9ff29cb53e
